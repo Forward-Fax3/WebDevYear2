@@ -1,0 +1,51 @@
+version: "3"
+#Indicate the Docker Compose version we are using
+#Then specify the services we are going to implement
+services:    
+#Specify the desired name
+  contendor_mysql:
+    image: elestio/mysql:9.0
+    container_name: mysql-container
+    environment:
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=testp
+      - MYSQL_ROOT_PASSWORD=root
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./etc/:/etc/mysql/conf.d
+  mi_servicio_apache:
+    container_name: apache-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - contendor_mysql
+    volumes:
+      - ./www/:/var/www/html
+    expose:
+      - 80
+    ports:
+      - 80:80
+    links:
+      - contendor_mysql
+  pma:
+    image: phpmyadmin
+    links:
+      - contendor_mysql
+    ports:
+      - 24581:80
+    environment:
+      - PMA_HOST=contendor_mysql
+      - PMA_PORT=3306
+      - PMA_USER=test
+      - PMA_PASSWORD=testp
+      - UPLOAD_LIMIT=500M
+      - MYSQL_USERNAME=root
+      - MYSQL_ROOT_PASSWORD=root
+    depends_on:
+      - contendor_mysql
