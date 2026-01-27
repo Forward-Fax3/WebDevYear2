@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>test</title>
+  <link rel="stylesheet" href="css.css">
+</head>
 <body>
 
 <h1>My first PHP page</h1>
@@ -16,12 +20,14 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "CREATE DATABASE IF NOT EXISTS db";
+        $sql = "CREATE DATABASE IF NOT EXISTS $dbname";
         if ($conn->query($sql) === TRUE) {
           echo "Database created successfully";
         } else {
-          echo "Error creating database: " . $conn->error;
+          die("Error creating database: " . $conn->error);
         }
+
+
 
         $conn->close();
     ?>
