@@ -25,8 +25,8 @@
         }
 
         session_start();
-        $_SESSION["Email"] = $Email;
-        setcookie("Email", $Email, time() + (3600 * 6), "/");
+        $_SESSION["ID"] = $usr["ID"];
+        setcookie("ID", $_SESSION["ID"], time() + (3600 * 6), "/");
         echo "{ \"success\": \"True\" }";
     }
     catch (Exception $e) {
