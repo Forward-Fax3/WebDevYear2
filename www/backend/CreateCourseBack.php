@@ -5,10 +5,10 @@
     }
 
     if (!isset($_COOKIE["ID"])) {
-        header("Location: http://localhost:80/Login.php?reson=Automaticly%20Logout%20due%20to%20timeout.<br>Please%20login%20again.");
+        header("Location: http://localhost:80/Login.php?reson=Automaticly%20Loggedout%20due%20to%20timeout.<br>Please%20login%20again.");
     }
 
-    require_once "./Core.php";
+    require "./Core.php";
 
     // check if user is teacher
     $sql = "SELECT * FROM usrs WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
@@ -30,9 +30,8 @@
     $Description = $conn->real_escape_string($_POST["Description"]);
 
     $jsonCourseData = json_encode(["Description" => $Description]);
-    $jsonCourseData = $conn->real_escape_string($jsonCourseData);
 
-    $sql = "INSERT INTO CourseData (CourseName, CourseData) VALUES (\"" . $CourseName . "\", \"" . $jsonCourseData . "\")";
+    $sql = "INSERT INTO CourseData (CourseName, CourseData) VALUES (\"" . $CourseName . "\", \"" . $conn->real_escape_string($jsonCourseData) . "\")";
     $conn->query($sql);
 
     // add techer to course
@@ -60,8 +59,7 @@
         array_push($courses->CourseIndexes, $CourseID);
 
         $json = json_encode($courses);
-        $json = $conn->real_escape_string($json);
-        $sql = "UPDATE usrs SET CourseIndexes = \"$json\" WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
+        $sql = "UPDATE usrs SET CourseIndexes = \"" . $conn->real_escape_string($json) . "\" WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
         $conn->query($sql);
 
         $conn->close();

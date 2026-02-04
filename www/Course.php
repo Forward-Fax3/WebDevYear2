@@ -1,11 +1,15 @@
 <?php
     session_start();
-
     if (!isset($_SESSION["ID"])) {
-        header("Location: http://localhost:80/backend/backend/Logout.php?reson=Invalid%20Session.<br>Please%20login%20again.");
+        header("Location: http://localhost:80/backend/Logout.php?reson=Invalid%20Session.<br>Please%20login%20again.");
+    }
+
+    if (!isset($_GET["CourseID"])) {
+        header("Location: http://localhost:80/HomePage.php");
     }
 
     if (!isset($_COOKIE["ID"])) {
+        setcookie("ReturnURL", "http://localhost:80/Course.php?CourseID=" . $_GET["CourseID"], time() + (3600 * 24), "/");
         header("Location: http://localhost:80/backend/Logout.php?reson=Automaticly%20Logout%20due%20to%20timeout.<br>Please%20login%20again.");
     }
 ?>
@@ -20,23 +24,14 @@
             body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         </style>
     </head>
-    <body class="w3-content">
+    <body class="w3-content" style="align-content: left">
         <?php
             require "./backend/Core.php";
-
             include "./Backend/GetUser.php";
-
-            if ($usr["CourseIndexes"] == null) {
-                $conn->close();
-                die("<br>no courses found");
-            }
-            
-            $isHomePage = true;
             include "./Backend/SideBar.php";
 
-            // main content part of the page
-            echo "<div class=\"w3-main\" style=\"margin-left:250px\"><div class=\"w3-row w3-padding-64\">";
-         
+            echo "this is the course page";
+            echo "<br><a href=\"http://localhost:80/backend/Logout.php\" class=\"button\">Logout</a>";
         ?>
     </body>
 </html>

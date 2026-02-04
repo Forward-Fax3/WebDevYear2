@@ -5,12 +5,18 @@ function PostLoginRequest() {
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:80/backend/LoginVerify.php", true);
-    
+
     xhr.onload = function () {
         if (xhr.status === 200) {
             var response = JSON.parse(xhr.responseText);
             if (response.success.localeCompare("True") === 0) {
-                window.location.href = "http://localhost:80/HomePage.php";
+                url = $.cookie("ReturnURL");
+                if (url === undefined || url == null) {
+                    url = "http://localhost:80/HomePage.php";
+                } else {
+                    $.removeCookie("ReturnURL");
+                }
+                window.location.href = url;
             } else {
                 node = document.getElementById("error");
                 node.innerHTML = response.error;
