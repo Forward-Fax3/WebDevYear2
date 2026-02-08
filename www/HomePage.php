@@ -14,11 +14,12 @@
 <html>
     <head>
         <title>Ace Training</title>
-        <link rel="stylesheet" href="http://localhost:80/css.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
         <style>
             .w3-sidebar a {font-family: "Roboto", sans-serif}
             body,h1,h2,h3,h4,h5,h6,.w3-wide {font-family: "Montserrat", sans-serif;}
         </style>
+        <script src="http://localhost:80/backend/JS/SideBar.js"></script>
     </head>
     <body class="w3-content">
         <?php

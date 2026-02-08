@@ -31,7 +31,7 @@
 <html>
     <head>
         <title>Ace Training</title>
-        <link rel="stylesheet" href="css.css">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
     </head>
     <body>
         <?php

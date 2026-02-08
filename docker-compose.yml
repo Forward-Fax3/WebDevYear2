@@ -15,6 +15,7 @@ services:
     volumes:
       - ./data:/var/lib/mysql
       - ./etc/:/etc/mysql/conf.d
+      
   apache:
     container_name: apache-container
     build:
@@ -30,6 +31,7 @@ services:
       - 80:80
     links:
       - mysql
+
   pma:
     image: phpmyadmin
     links:

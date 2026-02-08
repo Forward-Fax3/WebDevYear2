@@ -38,13 +38,16 @@
     if ($usr["IsTeacher"] == 1 && isset($isHomePage) && $isHomePage == true)
         echo "<a class=\"w3-bar-item w3-button\" href=\"http://localhost:80/CreateCourse.php\">Create New Course</a>";
 
-    echo "</div>";
+    echo "</div></nav>";
+
+    echo "<header class=\"w3-bar w3-top w3-hide-large w3-black w3-xlarge\">";
+    echo "<div class=\"w3-bar-item w3-padding-24 w3-wide\">LOGO</div>";
+    echo "<a href=\"javascript:void(0)\" class=\"w3-bar-item w3-button w3-padding-24 w3-right\" onclick=\"w3_open()\"><i class=\"fa fa-bars\"></i></a>";
+    echo "</header>";
+    
+    echo "<div class=\"w3-overlay w3-hide-large w3-animate-opacity\" onclick=\"w3_close()\" style=\"cursor:pointer\" title=\"close side menu\" id=\"myOverlay\"></div>";
     
     echo "<div class=\"w3-container w3-display-container w3-padding-16 w3-bottom\" style=\"z-index:3;width:250px\">";
     echo "<a class=\"w3-wide\" href=\"http://localhost:80/backend/Logout.php\">Logout</a>";
     echo "</div>";
-    
-    echo "</nav>";
-    
-    echo "<div class=\"w3-overlay w3-hide-large w3-animate-opacity\" onclick=\"w3_close()\" style=\"cursor:pointer\" title=\"close side menu\" id=\"myOverlay\"></div>";
 ?>

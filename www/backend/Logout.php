@@ -6,5 +6,5 @@
     if (isset($_GET["reson"]))
         header("Location: http://localhost:80/Login.php?reson=" . $_GET["reson"]);
     else
-        header("Location: http://localhost:80/Login.php?");
+        header("Location: http://localhost:80/Login.php");
 ?>
