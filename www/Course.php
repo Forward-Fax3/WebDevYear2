@@ -19,7 +19,7 @@
     $usrCourses = explode(",", $usr["CourseIndexes"]);
     $usrCourses = array_filter($usrCourses, "is_numeric");
 
-    // check if user has access to course
+    // check if the user has access to the course
     if (!in_array($_GET["CourseID"], $usrCourses)) {
         header("Location: http://localhost:80/HomePage.php");
     }
@@ -39,7 +39,7 @@
         </style>
         <script src="./backend/JS/SideBar.js"></script>
     </head>
-    <body class="w3-content w3-light-grey" style="align-content: left">
+    <body class="w3-content w3-light-grey">
         <?php
             include "./Backend/SideBar.php";
 
@@ -75,7 +75,7 @@
                 <div class="w3-container">
                     <div class="w3-bordery">
                         <h2 class="w3-wide">
-                            Discription
+                            Description
                         </h2>
                     </div>
                     <div class="w3-container w3-padding">

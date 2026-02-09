@@ -5,40 +5,39 @@
     }
 
     if (!isset($_COOKIE["ID"])) {
-        header("Location: http://localhost:80/backend/Logout.php?reson=Automaticly%20Loggedout%20due%20to%20timeout.<br>Please%20login%20again.");
+        header("Location: http://localhost:80/backend/Logout.php?reson=Automatically%20Logged%20out%20due%20to%20timeout.<br>Please%20login%20again.");
     }
 
     require "./Core.php";
-
-    // check if user is teacher
-    $sql = "SELECT * FROM usrs WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
-    $result = $conn->query($sql);
-
-    if ($result->num_rows == 0) {
-        $conn->close();
-        header("Location: http://localhost:80/HomePage.php");
-    }
-
-    $usr = $result->fetch_assoc();
+	require "./GetUser.php";
 
     if ($usr["IsTeacher"] == 0) {
         $conn->close();
-        header("Location: http://localhost:80/HomePage.php");
+		die("{ \"success\": \"False\", \"error\": \"You are not authorized to access this page.\" }");
     }
 
-    $CourseName = $conn->real_escape_string($_POST["CourseName"]);
+    $CourseName = $conn->real_escape_string($_POST["Name"]);
+
+	// check if course already exists
+	$sql = "SELECT 1 FROM Courses WHERE Name = \"" . $conn->real_escape_string($CourseName) . "\"";
+	$result = $conn->query($sql);
+	if ($result->num_rows == 1) {
+		$conn->close();
+		die("{ \"success\": \"False\", \"error\": \"Course already exists. Please choose another.\" }");
+	}
+
     $Description = $conn->real_escape_string($_POST["Description"]);
 
     $sql = "INSERT INTO Courses (Name, CourseLayout, Description, CourseData) VALUES (\"" . $CourseName . "\", \"\", \"" . $Description . "\", \"{}\");";
     $conn->query($sql);
 
     // add teacher to course
-    $sql = "SELECT * FROM Courses WHERE Name = \"$CourseName\"";
+    $sql = "SELECT * FROM Courses WHERE Name = \"" . $CourseName . "\"";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 0) {
         $conn->close();
-        die("no course found");
+		die("{ \"success\": \"False\", \"error\": \"Unknown error.\" }");
     }
 
     $courseData = $result->fetch_assoc();
@@ -57,5 +56,5 @@
         $conn->close();
     }
 
-    header("Location: http://localhost:80/Course.php?CourseID=" . $CourseID);
+	echo "{ \"success\": \"True\", \"id\": \"" . $CourseID . "\" }";
 ?>

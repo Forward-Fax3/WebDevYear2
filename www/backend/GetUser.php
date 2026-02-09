@@ -1,5 +1,5 @@
 <?php
-    require "./backend/Core.php";
+    require $_SERVER["DOCUMENT_ROOT"] . "/Backend/Core.php";
 
     if (!isset($usr)) {
         $userID = $_SESSION["ID"];
@@ -8,7 +8,7 @@
 
         if ($usr->num_rows == 0) {
             $conn->close();
-            die("no user found");
+            die("{ \"Successful\": \"User does not exist\" }");
         }
 
         $usr = $usr->fetch_assoc();

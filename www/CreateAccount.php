@@ -54,7 +54,7 @@
                     <div id="FirstPage">
                         <div class="w3-margin-bottom">
                             <label for="Email">Email</label>
-                            <input class="w3-input w3-border" type="email" id="Email" oninput="javascript:CheckPassword()" name="Email">
+                            <input class="w3-input w3-border" type="email" id="Email" oninput="javascript:CheckPassword()" name="Email" required>
                         </div>
                         <div class="w3-margin-bottom w3-text-red" type="text" id="EmailCheck" hidden></div>
 
@@ -100,7 +100,7 @@
 
                         <div class="w3-margin-bottom">
                             <label for="DOB">Date of Birth</label>
-                            <input class="w3-input w3-border" type="date" id="DOB" name="DOB">
+                            <input class="w3-input w3-border" type="date" id="DOB" name="DOB" required>
                         </div>
 
                         <div class="w3-margin-bottom">

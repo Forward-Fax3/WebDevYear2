@@ -6,7 +6,7 @@
             header("Location: http://localhost:80/index.php");
         }
 
-        require_once "./Backend/Core.php";
+        require "./Core.php";
 
         $Email = $conn->real_escape_string($_POST["Email"]);
 

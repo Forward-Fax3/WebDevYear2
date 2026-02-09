@@ -1,24 +1,14 @@
-function PostLoginRequest() {
-    var formData = new FormData();
-    formData.append("Email", document.getElementById("Email").value);
-    formData.append("Psw", document.getElementById("Psw").value);
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:80/backend/LoginVerify.php", true);
+function SendRequest(XML_URL, data, url) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", XML_URL , true);
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
+            const response = JSON.parse(xhr.responseText);
             if (response.success.localeCompare("True") === 0) {
-                url = $.cookie("ReturnURL");
-                if (url === undefined || url == null) {
-                    url = "http://localhost:80/HomePage.php";
-                } else {
-                    $.removeCookie("ReturnURL");
-                }
                 window.location.href = url;
             } else {
-                node = document.getElementById("error");
+                const node = document.getElementById("error");
                 node.innerHTML = response.error;
             }
         } else {
@@ -26,11 +16,27 @@ function PostLoginRequest() {
         }
     };
 
-    xhr.send(formData);
+    xhr.send(data);
+}
+
+function PostLoginRequest() {
+    const formData = new FormData();
+    formData.append("Email", document.getElementById("Email").value);
+    formData.append("Psw", document.getElementById("Psw").value);
+
+    let url = $.cookie("ReturnURL");
+    if (url === undefined || url == null) {
+        url = "http://localhost:80/HomePage.php";
+    } else {
+        $.removeCookie("ReturnURL");
+    }
+
+    const XML_URL = "http://localhost:80/backend/LoginVerify.php";
+    SendRequest(XML_URL, formData, url);
 }
 
 function CreateAccount() {
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append("Email", document.getElementById("Email").value);
     formData.append("Psw", document.getElementById("Psw").value);
     formData.append("FName", document.getElementById("FName").value);
@@ -40,29 +46,14 @@ function CreateAccount() {
     formData.append("Gender", document.getElementById("Gender").value);
     formData.append("Pronouns", document.getElementById("Pronouns").value);
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:80/backend/CreateAccountBack.php", true);
-
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            if (response.success.localeCompare("True") === 0) {
-                window.location.href = "http://localhost:80/Login.php";
-            } else {
-                node = document.getElementById("error");
-                node.innerHTML = response.error;
-            }
-        } else {
-            alert("Error: " + xhr.status);
-        }
-    };
-
-    xhr.send(formData);
+    const XML_URL = "http://localhost:80/backend/CreateAccountBack.php";
+    let url = "http://localhost:80/Login.php";
+    SendRequest(XML_URL, formData, url);
 }
 
 function ShowPassword() {
-    var passwordField = document.getElementById("Psw");
-    var eye = document.getElementById("Eye");
+    const passwordField = document.getElementById("Psw");
+    const eye = document.getElementById("Eye");
 
     if (passwordField.type === "password") {
         passwordField.type = "text";
@@ -74,8 +65,8 @@ function ShowPassword() {
 }
 
 function ShowPasswordAgain() {
-    var passwordField = document.getElementById("PswA");
-    var eye = document.getElementById("EyeA");
+    const passwordField = document.getElementById("PswA");
+    const eye = document.getElementById("EyeA");
 
     if (passwordField.type === "password") {
         passwordField.type = "text";
@@ -87,15 +78,15 @@ function ShowPasswordAgain() {
 }
 
 function CheckPassword() {
-    var EmailField = document.getElementById("Email");
-    var passwordField = document.getElementById("Psw");
-    var passwordAgainField = document.getElementById("PswA");
-    var EmailCheck = document.getElementById("EmailCheck");
-    var charCheck = document.getElementById("CharCheck");
-    var passwordCheck = document.getElementById("PasswordCheck");
-    var nextButton = document.getElementById("NextButton");
-    var boolLengthSatisfied = false;
-    var boolMatchSatisfied = false;
+    const EmailField = document.getElementById("Email");
+    const passwordField = document.getElementById("Psw");
+    const passwordAgainField = document.getElementById("PswA");
+    const EmailCheck = document.getElementById("EmailCheck");
+    const charCheck = document.getElementById("CharCheck");
+    const passwordCheck = document.getElementById("PasswordCheck");
+    const nextButton = document.getElementById("NextButton");
+    let boolLengthSatisfied = false;
+    let boolMatchSatisfied = false;
 
     if (EmailField.value.length > 255) {
         EmailCheck.hidden = false;
@@ -104,7 +95,7 @@ function CheckPassword() {
         EmailCheck.hidden = true;
     }
 
-    if (passwordField.value.length == 0) {
+    if (passwordField.value.length === 0) {
         charCheck.hidden = true;
         return;
     }
@@ -120,11 +111,11 @@ function CheckPassword() {
         boolLengthSatisfied = true;
     }
 
-    if (passwordAgainField.value.length == 0) {
+    if (passwordAgainField.value.length === 0) {
         return;
     }
 
-    if (passwordField.value == passwordAgainField.value) {
+    if (passwordField.value === passwordAgainField.value) {
         passwordCheck.style.color = 'green';
         passwordCheck.innerHTML = 'Passwords Match';
         passwordCheck.hidden = false;
@@ -135,24 +126,20 @@ function CheckPassword() {
         passwordCheck.hidden = false;
     }
 
-    if (boolLengthSatisfied && boolMatchSatisfied && EmailField.value.length > 0) {
-        nextButton.disabled = false;
-    } else {
-        nextButton.disabled = true;
-    }
+    nextButton.disabled = !(boolLengthSatisfied && boolMatchSatisfied && EmailField.value.length > 0);
 }
 
 function NextPage() {
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append("Email", document.getElementById("Email").value);
 
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open("POST", "http://localhost:80/backend/CheckIfEmailExists.php", true);
 
     xhr.onload = function () {
         if (xhr.status === 200) {
-            var response = JSON.parse(xhr.responseText);
-            var errorField = document.getElementById("error");
+            const response = JSON.parse(xhr.responseText);
+            const errorField = document.getElementById("error");
             if (response.success.localeCompare("True") === 0) {
                 document.getElementById("FirstPage").hidden = true;
                 document.getElementById("SecondPage").hidden = false;
@@ -192,17 +179,17 @@ function BackPage() {
 }
 
 function SecondPageChecks() {
-    var fNameSatisfied = false;
-    var sNameSatisfied = false;
-    var phoneSatisfied = false;
-    var pronounsSatisfied = false;
+    let fNameSatisfied = false;
+    let sNameSatisfied = false;
+    let phoneSatisfied = false;
+    let pronounsSatisfied = false;
 
     {
-        var FName = document.getElementById("FName").value;
-        var FNameErrorField = document.getElementById("FNameError");
-        var FNameWrittenTo = document.getElementById("FNameWrittenTo");
+        const FName = document.getElementById("FName").value;
+        const FNameErrorField = document.getElementById("FNameError");
+        const FNameWrittenTo = document.getElementById("FNameWrittenTo");
 
-        if (FName.length == 0 && FNameWrittenTo.innerHTML == 't') {
+        if (FName.length === 0 && FNameWrittenTo.innerHTML === 't') {
             FNameErrorField.hidden = false;
             FNameErrorField.innerHTML = "First Name is required.";
         } else if (FName.length > 255) {
@@ -222,11 +209,11 @@ function SecondPageChecks() {
     }
 
     {
-        var sName = document.getElementById("Surname").value;
-        var SNameErrorField = document.getElementById("SurnameError");
-        var SNameWrittenTo = document.getElementById("SurnameWrittenTo");
+        const sName = document.getElementById("Surname").value;
+        const SNameErrorField = document.getElementById("SurnameError");
+        const SNameWrittenTo = document.getElementById("SurnameWrittenTo");
 
-        if (sName.length == 0 && SNameWrittenTo.innerHTML == 't') {
+        if (sName.length === 0 && SNameWrittenTo.innerHTML === 't') {
             SNameErrorField.hidden = false;
             SNameErrorField.innerHTML = "Last Name is required.";
         } else if (sName.length > 255) {
@@ -245,15 +232,15 @@ function SecondPageChecks() {
         }
     }
 
-    PhoneNumbertest: {
-        var Phone = document.getElementById("Phone").value;
-        var PhoneErrorField = document.getElementById("PhoneError");
-        var PhoneWrittenTo = document.getElementById("PhoneWrittenTo");
+    PhoneNumberTest: {
+        const Phone = document.getElementById("Phone").value;
+        const PhoneErrorField = document.getElementById("PhoneError");
+        const PhoneWrittenTo = document.getElementById("PhoneWrittenTo");
 
-        if (Phone.length == 0 && PhoneWrittenTo.innerHTML == 't') {
+        if (Phone.length === 0 && PhoneWrittenTo.innerHTML === 't') {
             PhoneErrorField.hidden = false;
             PhoneErrorField.innerHTML = "Phone Number is required.";
-            break PhoneNumbertest;
+            break PhoneNumberTest;
         } else if (Phone.length > 0) {
             PhoneWrittenTo.innerHTML = 't';
         }
@@ -261,14 +248,14 @@ function SecondPageChecks() {
         if (Phone.length > 63) {
             PhoneErrorField.hidden = false;
             PhoneErrorField.innerHTML = "Phone Number must be less than 64 numbers long.";
-            break PhoneNumbertest;
+            break PhoneNumberTest;
         } 
 
-        for (var i = 0; i < Phone.length; i++) {
+        for (let i = 0; i < Phone.length; i++) {
             if (Phone[i] < '0' || Phone[i] > '9') {
                 PhoneErrorField.hidden = false;
                 PhoneErrorField.innerHTML = "Phone Number must only contain numbers.";
-                break PhoneNumbertest;
+                break PhoneNumberTest;
             }
         }
 
@@ -291,11 +278,11 @@ function SecondPageChecks() {
     }
 
     {
-        var Pronouns = document.getElementById("Pronouns").value;
-        var PronounsErrorField = document.getElementById("PronounsError");
-        var PronounsWrittenTo = document.getElementById("PronounsWrittenTo");
+        const Pronouns = document.getElementById("Pronouns").value;
+        const PronounsErrorField = document.getElementById("PronounsError");
+        const PronounsWrittenTo = document.getElementById("PronounsWrittenTo");
 
-        if (Pronouns.length == 0 && PronounsWrittenTo.innerHTML == 't') {
+        if (Pronouns.length === 0 && PronounsWrittenTo.innerHTML === 't') {
             PronounsErrorField.hidden = false;
             PronounsErrorField.innerHTML = "Pronouns is required.";
         } else if (Pronouns.length > 63) {
@@ -314,7 +301,5 @@ function SecondPageChecks() {
         }
     }
 
-    if (fNameSatisfied && sNameSatisfied && phoneSatisfied && pronounsSatisfied) {
-        document.getElementById("SubmitButton").disabled = false;
-    }
+    document.getElementById("SubmitButton").disabled = !(fNameSatisfied && sNameSatisfied && phoneSatisfied && pronounsSatisfied);
 }
