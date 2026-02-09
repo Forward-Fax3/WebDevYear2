@@ -50,7 +50,7 @@
                 <form action="javascript:PostLoginRequest()" method="post" style="display: flex; flex-direction: column;">
                     <div class="w3-margin-bottom">
                         <label for="Email">Email</label>
-                        <input class="w3-input w3-border" type="text" id="Email" name="Email">
+                        <input class="w3-input w3-border" type="Email" id="Email" name="Email">
                     </div>
                     <label class="w3-center" for="Psw">Password</label>
                     <div class="w3-margin-bottom" style="display: flex; align-items: center; margin-bottom: 1.5rem; ">

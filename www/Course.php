@@ -12,6 +12,17 @@
         setcookie("ReturnURL", "http://localhost:80/Course.php?CourseID=" . $_GET["CourseID"], time() + (3600 * 24), "/");
         header("Location: http://localhost:80/backend/Logout.php?reson=Automaticly%20Logout%20due%20to%20timeout.<br>Please%20login%20again.");
     }
+
+    require "./backend/Core.php";
+    include "./Backend/GetUser.php";
+
+    $usrCourses = explode(",", $usr["CourseIndexes"]);
+    $usrCourses = array_filter($usrCourses, "is_numeric");
+
+    // check if user has access to course
+    if (!in_array($_GET["CourseID"], $usrCourses)) {
+        header("Location: http://localhost:80/HomePage.php");
+    }
 ?>
 
 <!DOCTYPE html>
@@ -28,42 +39,86 @@
         </style>
         <script src="./backend/JS/SideBar.js"></script>
     </head>
-    <body class="w3-content" style="align-content: left">
+    <body class="w3-content w3-light-grey" style="align-content: left">
         <?php
-            require "./backend/Core.php";
-            include "./Backend/GetUser.php";
             include "./Backend/SideBar.php";
 
-            $sql = "SELECT * FROM CourseData WHERE ID = " . (int)$_GET["CourseID"];
+            $sql = "SELECT * FROM Courses WHERE ID = " . (int)$_GET["CourseID"];
             $result = $conn->query($sql);
             
             if ($result->num_rows == 0) {
                 $conn->close();
-                die("no courses found");
+                die("no course found");
             }
             
             $courseData = $result->fetch_assoc();
             $JSONCourseData = json_decode($courseData["CourseData"]);
         ?>
-        <div class="w3-main" style="margin-left:250px">
+        <div class="w3-main" style="left:250px">
             <div class="w3-hide-large" style="margin-top:83px"></div>
-            <header class="w3-container w3-xlarge">
-                <p class="w3-left">
-                    <?php echo $courseData["CourseName"]; ?>
-                </p>
-                <p class="w3-right">
-                    <!--
-                    <i class="fa fa-search"></i>
-                    TODO: if have time add search
-                    -->
-                </p>
-            </header>
-            <div class="w3-container">
-                <p>
+                <header class="w3-container w3-xlarge">
+                    <h1 class="w3-left w3-wide">
+                        <?php echo $courseData["Name"]; ?>
+                    </h1>
+                    <div class="w3-right w3-padding">
+                        <?php
+                            if ($usr["IsTeacher"] == 1) {
+                                echo "<a class=\"w3-button w3-grey\" href=\"http://localhost:80/EditCourse.php?CourseID=" . $courseData["ID"] . "\">Edit Course</a>";
+                            }
+                        ?>
+                        <i class="fa fa-search"></i>
+                        <!--
+                        TODO: if have time add search
+                        -->
+                    </div>
+                </header>
+                <div class="w3-container">
+                    <div class="w3-bordery">
+                        <h2 class="w3-wide">
+                            Discription
+                        </h2>
+                    </div>
+                    <div class="w3-container w3-padding">
+                        <?php
+                            echo $courseData["Description"];
+                        ?>
+                    </div>
+                    <div class="w3-bordery">
+                        <?php
+                            $courseLayout = $courseData["CourseLayout"];
+                            $courseLayout = explode(",", $courseLayout);
+                            $courseLayout = array_filter($courseLayout, "is_numeric");
+
+                            $blockNumber = 0;
+
+                            $courseLayout = array_map(function ($item) {
+                                return (int)$item;
+                            }, $courseLayout);
+                            echo count($courseLayout);
+
+                            for ($i = 0; $i < count($courseLayout); $i++) {
+                                switch ($courseLayout[$i]) {
+                                case 0:
+                                    // new block
+                                    echo "<div class=\"w3-container w3-padding w3-grey\"><h2 class=\"w3-wide\">";
+                                    echo $JSONCourseData["Name"][$blockNumber];
+                                    $blockNumber++;
+                                    break;
+                                case 1: 
+                                    // end block
+                                    echo "</h2></div>";
+                                }
+                            }
+                        ?>
+                    </div>
                     <?php
-                        echo $JSONCourseData->Description;
+                        if ($usr["IsTeacher"] == 1) {
+                            echo "<div class=\"w3-container w3-bottom w3-left w3-bar w3-padding w3-grey\" style=\"z-index:3;width:315px\">"
+                                . "<a class=\"w3-button w3-black\" href=\"http://localhost:80/DeleteCourse.php?CourseID=" . $courseData["ID"] . "\">Delete Course</a>"
+                            . "</div>";
+                        }
                     ?>
-                </p>
+                </div>
             </div>
         </div>
     </body>

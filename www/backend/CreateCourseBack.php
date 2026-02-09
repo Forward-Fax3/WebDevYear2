@@ -5,7 +5,7 @@
     }
 
     if (!isset($_COOKIE["ID"])) {
-        header("Location: http://localhost:80/Login.php?reson=Automaticly%20Loggedout%20due%20to%20timeout.<br>Please%20login%20again.");
+        header("Location: http://localhost:80/backend/Logout.php?reson=Automaticly%20Loggedout%20due%20to%20timeout.<br>Please%20login%20again.");
     }
 
     require "./Core.php";
@@ -29,13 +29,11 @@
     $CourseName = $conn->real_escape_string($_POST["CourseName"]);
     $Description = $conn->real_escape_string($_POST["Description"]);
 
-    $jsonCourseData = json_encode(["Description" => $Description]);
-
-    $sql = "INSERT INTO CourseData (CourseName, CourseData) VALUES (\"" . $CourseName . "\", \"" . $conn->real_escape_string($jsonCourseData) . "\")";
+    $sql = "INSERT INTO Courses (Name, CourseLayout, Description, CourseData) VALUES (\"" . $CourseName . "\", \"\", \"" . $Description . "\", \"{}\");";
     $conn->query($sql);
 
-    // add techer to course
-    $sql = "SELECT * FROM CourseData WHERE CourseName = \"$CourseName\"";
+    // add teacher to course
+    $sql = "SELECT * FROM Courses WHERE Name = \"$CourseName\"";
     $result = $conn->query($sql);
 
     if ($result->num_rows == 0) {
@@ -48,22 +46,16 @@
     
     $courseIndexes = $usr["CourseIndexes"];
 
-    if ($courseIndexes == null) {
-        $json = json_encode(["CourseIndexes" => [$CourseID]]);
-        $json = $conn->real_escape_string($json);
-        $sql = "UPDATE usrs SET CourseIndexes = \"$json\" WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
+    if ($courseIndexes == null || $courseIndexes == "") {
+        $sql = "UPDATE usrs SET CourseIndexes = \"" . $CourseID . "\" WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
         $conn->query($sql);
     } else {
-        $courses = json_decode($usr["CourseIndexes"], false);
+		$courseIndexes = $courseIndexes . "," . $CourseID;
 
-        array_push($courses->CourseIndexes, $CourseID);
-
-        $json = json_encode($courses);
-        $sql = "UPDATE usrs SET CourseIndexes = \"" . $conn->real_escape_string($json) . "\" WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
-        $conn->query($sql);
-
+        $sql = "UPDATE usrs SET CourseIndexes = \"" . $conn->real_escape_string($courseIndexes) . "\" WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
+		$conn->query($sql);
         $conn->close();
     }
 
-    header("Location: http://localhost:80/HomePage.php");
+    header("Location: http://localhost:80/Course.php?CourseID=" . $CourseID);
 ?>

@@ -1,5 +1,5 @@
 <?php
-    require_once "./backend/Core.php";
+    require "./backend/Core.php";
 
     session_start();
     if (!isset($_SESSION["ID"])) {
@@ -40,7 +40,7 @@
             echo "<input type=\"text\" id=\"CourseName\" name=\"CourseName\"><br>";
             echo "<label for=\"Description\">Course Data</label><br>";
             echo "<input type=\"text\" id=\"Description\" name=\"Description\"><br>";
-            echo "<input type=\"submit\" value=\"login\">";
+            echo "<input type=\"submit\" value=\"Create Course\">";
             echo '</form>';
         ?>
     </body>
