@@ -112,8 +112,8 @@
                                     break;
                                 }
                             }
-                            echo "<br><button onclick=\"javascript:RemoveElement(" . $elementNumber . ")\" class=\"w3-button w3-block w3-red w3-bar-item\" style=\"width:100px\" type=\"button\">Remove</button><br><br>";
-                            echo "</div>";
+                            echo "<br><button onclick=\"javascript:RemoveElement(" . $elementNumber . ")\" class=\"w3-button w3-block w3-red w3-bar-item\" style=\"width:100px\" type=\"button\">Remove</button><br><br>" .
+                                 "</div>";
                         }
                     ?>
                 </div>

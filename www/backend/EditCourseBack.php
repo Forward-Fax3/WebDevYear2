@@ -11,21 +11,28 @@
 	$conn->query($sql);
 
 	$numberOfElements = $_POST["NumberOfElements"];
-	$sql = "SELECT * FROM Courses WHERE ID = " . $_POST["ID"];
+	$sql = "SELECT FirstData FROM Courses WHERE ID = " . $_POST["ID"];
 	$result = $conn->query($sql);
-
-	$currentID = $result->fetch_assoc()["FirstData"];
+	$sql = "SELECT * FROM CourseData WHERE ID = " . $result->fetch_assoc()["FirstData"];
+	$result = $conn->query($sql);
+	$currentElement = $result->fetch_assoc();
 
 	for ($i = 0; $i < $numberOfElements; $i++) {
 		if (!isset($_POST["Element" . $i]))
 			die("{ \"success\": \"False\", \"error\": \"Invalid input.\" }");
+		
+		if ((int)$currentElement["Type"] == 0)
+		{
+			$sql = "UPDATE CourseData SET Data = \"" . $_POST["Element" . $i] . "\" WHERE ID = " . $currentElement["ID"];
+			$conn->query($sql);
+		}
 
-		$sql = "UPDATE CourseData SET Data = \"" . $_POST["Element" . $i] . "\" WHERE ID = " . $currentID;
-		$conn->query($sql);
+		if ($currentElement["NextID"] == NULL)
+			continue; // this should end the loop
 
-		$sql = "SELECT * FROM CourseData WHERE ID = " . $currentID;
+		$sql = "SELECT * FROM CourseData WHERE ID = " . $currentElement["NextID"];
 		$result = $conn->query($sql);
-		$currentID = $result->fetch_assoc()["NextID"];
+		$currentElement = $result->fetch_assoc();
 	}
 
 	echo "{ \"success\": \"True\" }";
