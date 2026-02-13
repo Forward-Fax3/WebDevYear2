@@ -52,7 +52,7 @@
             }
             
             $courseData = $result->fetch_assoc();
-            $JSONCourseData = json_decode($courseData["CourseData"]);
+            $currentDataID = $courseData["FirstData"];
         ?>
         <div class="w3-main" style="left:250px">
             <div class="w3-hide-large" style="margin-top:83px"></div>
@@ -66,8 +66,8 @@
                                 echo "<a class=\"w3-button w3-grey\" href=\"http://localhost:80/EditCourse.php?CourseID=" . $courseData["ID"] . "\">Edit Course</a>";
                             }
                         ?>
-                        <i class="fa fa-search"></i>
                         <!--
+                        <i class="fa fa-search"></i>
                         TODO: if have time add search
                         -->
                     </div>
@@ -85,39 +85,34 @@
                     </div>
                     <div class="w3-bordery">
                         <?php
-                            $courseLayout = $courseData["CourseLayout"];
-                            $courseLayout = explode(",", $courseLayout);
-                            $courseLayout = array_filter($courseLayout, "is_numeric");
-
                             $blockNumber = 0;
 
-                            $courseLayout = array_map(function ($item) {
-                                return (int)$item;
-                            }, $courseLayout);
-                            echo count($courseLayout);
-
-                            for ($i = 0; $i < count($courseLayout); $i++) {
-                                switch ($courseLayout[$i]) {
-                                case 0:
-                                    // new block
-                                    echo "<div class=\"w3-container w3-padding w3-grey\"><h2 class=\"w3-wide\">";
-                                    echo $JSONCourseData["Name"][$blockNumber];
-                                    $blockNumber++;
+                            while (true) {
+                                if ($currentDataID == NULL)
                                     break;
-                                case 1: 
-                                    // end block
-                                    echo "</h2></div>";
+
+                                $sql = "SELECT * FROM CourseData WHERE ID = " . (int)$currentDataID;
+                                $result = $conn->query($sql);
+                                $data = $result->fetch_assoc();
+                                $currentDataID = $data["NextID"];
+
+                                echo "<div class=\"w3-container w3-padding w3-border\"><h2 class=\"w3-wide\">" .
+                                     $data["Name"] .
+                                     "</h2>";
+
+                                switch ($data["Type"]) {
+                                case 0:
+                                    echo "<p class=\"w3-container w3-padding\">" . $data["Data"] . "</p>";
+                                    break;
+                                case 1:
+                                    $fileData = json_decode($data["Data"]);
+
+                                    echo "<a href=\"http://localhost:80/backend/DownloadFile.php?FileID=" . $data["ID"] . "\" class=\"w3-button w3-block w3-blue w3-bar-item\" type=\"button\">Download: " . $fileData->Name . "</a>";
                                 }
+                                echo "</div><br>";
                             }
                         ?>
                     </div>
-                    <?php
-                        if ($usr["IsTeacher"] == 1) {
-                            echo "<div class=\"w3-container w3-bottom w3-left w3-bar w3-padding w3-grey\" style=\"z-index:3;width:315px\">"
-                                . "<a class=\"w3-button w3-black\" href=\"http://localhost:80/DeleteCourse.php?CourseID=" . $courseData["ID"] . "\">Delete Course</a>"
-                            . "</div>";
-                        }
-                    ?>
                 </div>
             </div>
         </div>

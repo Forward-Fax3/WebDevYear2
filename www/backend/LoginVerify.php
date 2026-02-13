@@ -10,7 +10,7 @@
 
         $Email = $conn->real_escape_string($_POST["Email"]);
 
-        $sql = "SELECT * FROM usrs WHERE Email = \"$Email\"";
+        $sql = "SELECT * FROM usrs WHERE Email = \"" . $Email . "\"";
         $result = $conn->query($sql);
 
         if ($result->num_rows == 0) {

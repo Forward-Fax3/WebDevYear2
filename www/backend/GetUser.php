@@ -1,4 +1,9 @@
 <?php
+    if (!isset($_SESSION))
+        session_start();
+    if (!isset($_SESSION["ID"]))
+        header("Location: http://localhost:80/backend/Login.php");
+
     require $_SERVER["DOCUMENT_ROOT"] . "/Backend/Core.php";
 
     if (!isset($usr)) {

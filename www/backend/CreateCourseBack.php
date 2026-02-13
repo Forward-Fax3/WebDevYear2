@@ -28,20 +28,11 @@
 
     $Description = $conn->real_escape_string($_POST["Description"]);
 
-    $sql = "INSERT INTO Courses (Name, CourseLayout, Description, CourseData) VALUES (\"" . $CourseName . "\", \"\", \"" . $Description . "\", \"{}\");";
+    $sql = "INSERT INTO Courses (Name, Description, Users) VALUES (\"" . $CourseName . "\", \"" . $Description . "\", \"" . $_SESSION["ID"] . "\");";
     $conn->query($sql);
 
     // add teacher to course
-    $sql = "SELECT * FROM Courses WHERE Name = \"" . $CourseName . "\"";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows == 0) {
-        $conn->close();
-		die("{ \"success\": \"False\", \"error\": \"Unknown error.\" }");
-    }
-
-    $courseData = $result->fetch_assoc();
-    $CourseID = $courseData["ID"];
+    $CourseID = $conn->insert_id;
     
     $courseIndexes = $usr["CourseIndexes"];
 

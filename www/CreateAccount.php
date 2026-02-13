@@ -100,7 +100,7 @@
 
                         <div class="w3-margin-bottom">
                             <label for="DOB">Date of Birth</label>
-                            <input class="w3-input w3-border" type="date" id="DOB" name="DOB" required>
+                            <input class="w3-input w3-border" type="date" id="DOB" name="DOB">
                         </div>
 
                         <div class="w3-margin-bottom">

@@ -25,6 +25,7 @@ services:
       - mysql
     volumes:
       - ./www/:/var/www/html
+      - ./php.ini:/usr/local/etc/php/php.ini
     expose:
       - 80
     ports:

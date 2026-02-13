@@ -10,15 +10,7 @@
         header("Location: http://localhost:80/Login.php?reson=Automaticly%20Logout%20due%20to%20timeout.<br>Please%20login%20again.");
     }
 
-    $sql = "SELECT * FROM usrs WHERE ID = " . $conn->real_escape_string($_SESSION["ID"]);
-    $result = $conn->query($sql);
-
-    if ($result->num_rows == 0) {
-        $conn->close();
-        die("no user found");
-    }
-
-    $usr = $result->fetch_assoc();
+    include "./backend/GetUser.php";
 
     // check if user is teacher
     if ($usr["IsTeacher"] == 0) {
@@ -55,9 +47,9 @@
                         <label for="Name">Course Name</label>
                         <input class="w3-input w3-border w3-padding" type="text" id="Name" name="Name" required>
                     </div>
-                    <div class="w3-section w3-left-align w3-margin-left w3-margin-right">
+                    <div class="w3-section w3-left-align w3-margin-left w3-margin-right" style="width: 100%">
                         <label for="Description">Course Description</label>
-                        <textarea class="w3-input w3-border w3-text" rows="8" type="text" id="Description" name="Description" required></textarea>
+                        <textarea class="w3-input w3-border w3-text" rows="8" style="width: 100%" id="Description" name="Description" required></textarea>
                     </div>
                     <input class="w3-button w3-light-grey" type="submit" value="Create Course">
                 </form>

@@ -39,7 +39,7 @@
 
     echo "<br>" .
          "<div class=\"w3-bottom w3-left w3-light-grey\" style=\"max-width: 239px\">" .
-         "<a class=\"w3-bar-item w3-button\" style=\"max-width: 239px\" href=\"http://localhost:80/Profile.php\">Profile</a>" .
+//         "<a class=\"w3-bar-item w3-button\" style=\"max-width: 239px\" href=\"http://localhost:80/Profile.php\">Profile</a>" .
          "<a class=\"w3-bar-item w3-button\" style=\"max-width: 239px\" href=\"http://localhost:80/backend/Logout.php\">Logout</a>" .
          "</div>" .
 
