@@ -39,7 +39,7 @@
                 ID int UNIQUE NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 Name varchar(255) NOT NULL,
                 Description text NOT NULL,
-    			Users text NOT NULL Default \"\",
+    			Users text NOT NULL,
     			FirstData int DEFAULT NULL
             );";
             $conn->query($sql);

@@ -47,9 +47,9 @@
                         <label for="Name">Course Name</label>
                         <input class="w3-input w3-border w3-padding" type="text" id="Name" name="Name" required>
                     </div>
-                    <div class="w3-section w3-left-align w3-margin-left w3-margin-right" style="width: 100%">
+                    <div class="w3-section w3-left-align w3-margin-left w3-margin-right">
                         <label for="Description">Course Description</label>
-                        <textarea class="w3-input w3-border w3-text" rows="8" style="width: 100%" id="Description" name="Description" required></textarea>
+                        <textarea class="w3-input w3-border w3-text W3-padding" rows="8" id="Description" name="Description" required></textarea>
                     </div>
                     <input class="w3-button w3-light-grey" type="submit" value="Create Course">
                 </form>
